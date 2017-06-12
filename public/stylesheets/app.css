@@ -10,6 +10,14 @@ i.icon {
     display: inline;
 }
 
+#description {
+    padding: 5px 0;
+}
+
 .chevron {
     padding-top: 5px;
+}
+
+#comments {
+    margin-top: 10px;
 }
