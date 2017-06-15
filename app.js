@@ -2,9 +2,12 @@ var bodyParser = require("body-parser"),
     methodOverride = require("method-override"),
     expressSanitizer = require("express-sanitizer"),
     mongoose = require("mongoose"),
+    passport = require("passport"),
+    LocalStrategy = require("passport-local"),
     express = require("express"),
     Blog = require("./models/blog"),
     Comment = require("./models/comment"),
+    User = require("./models/user"),
     app = express(),
     seedDB = require("./seeds");
 
@@ -16,7 +19,25 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(expressSanitizer());
 app.use(methodOverride("_method"));
 
-seedDB();
+// seedDB();
+
+// Passport Configuration
+app.use(require("express-session")({
+    secret: "I bet my life for you",
+    resave: false,
+    saveUninitialized: false
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+app.use(function(req, res, next) {
+    res.locals.currentUser = req.user;
+    next();
+});
 
 // ROUTES
 
@@ -136,6 +157,47 @@ app.post("/blogs/:id/comments", function(req, res) {
             });
         }
     });
+});
+
+// =====================
+// AUTH ROUTES
+// =====================
+
+// show register form
+app.get("/register", function(req, res) {
+    res.render("register");
+});
+
+// handle sign up logic
+app.post("/register", function(req, res) {
+    var newUser = User({username: req.body.username});
+    User.register(newUser, req.body.password, function(err, user) {
+       if(err) {
+           console.log(err);
+           return res.redirect("register");
+       }
+       passport.authenticate("local")(req, res, function() {
+           res.redirect("/blogs");
+       })
+    });
+});
+
+// show login form
+app.get("/login", function(req, res) {
+   res.render("login");
+});
+
+// handle login logic
+app.post("/login", passport.authenticate("local", {
+    successRedirect: "/blogs",
+    failureRedirect: "/login"
+}), function(req, res) {
+});
+
+// logout route
+app.get("/logout", function(req, res) {
+   req.logout();
+   res.redirect("/blogs");
 });
 
 app.listen(3000, function() {
