@@ -21,3 +21,20 @@ i.icon {
 #comments {
     margin-top: 10px;
 }
+
+#author {
+    font-weight: bold;
+    font-style: italic;
+}
+
+#user-label {
+    display: inline;
+}
+
+#password-label {
+    display: inline;
+}
+
+.inverted.message {
+    padding-left: inherit;
+}

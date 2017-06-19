@@ -18,15 +18,23 @@ router.get("/", function (req, res) {
 });
 
 // NEW - show form to create a new blog post
-router.get("/new", function (req, res) {
+router.get("/new", isLoggedIn, function (req, res) {
     res.render("blogs/new");
 });
 
 // CREATE - add new blog post to the database
-router.post("/", function (req, res) {
+router.post("/", isLoggedIn, function (req, res) {
     // create new blog
-    req.body.blog.body = req.sanitize(req.body.blog.body);
-    Blog.create(req.body.blog, function (err, newBlog) {
+    var title = req.body.title;
+    var image = req.body.image;
+    var body = req.body.body;
+    var author = {
+        id: req.user._id,
+        username: req.user.username
+    }
+    var newBlog = {title: title, image: image, body: body, author: author};
+
+    Blog.create(newBlog, function (err, newBlog) {
         if(err) {
             res.render("blogs/new");
         } else {
@@ -82,5 +90,13 @@ router.delete("/:id", function (req, res) {
         }
     });
 });
+
+// middleware
+function isLoggedIn(req, res, next) {
+    if(req.isAuthenticated()) {
+        return next();
+    }
+    res.redirect("/login");
+}
 
 module.exports = router;

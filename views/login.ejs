@@ -1,22 +1,27 @@
 <% include ./partials/header %>
 
 <div class="ui main text container">
-    <div class="ui header">Sign Up</div>
+    <div class="ui header">Log In</div>
     <div class="ui inverted segment">
         <div class="ui inverted form">
             <form action="/login" method="POST">
                 <div class="two fields">
                     <div class="field">
-                        <label>Username</label>
+                        <i class="user icon"></i>
+                        <label id="user-label">Username</label>
                         <input type="text" name="username" placeholder="Username">
                     </div>
                     <div class="field">
-                        <label>Password</label>
+                        <i class="lock icon"></i>
+                        <label id="password-label">Password</label>
                         <input type="password" name="password" placeholder="Password">
                     </div>
                 </div>
                 <button class="ui inverted button">Log In</button>
             </form>
+            <div class="ui inverted message">
+                New to us? <a href="/register">Sign Up</a>
+            </div>
         </div>
     </div>
 </div>

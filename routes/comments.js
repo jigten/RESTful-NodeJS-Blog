@@ -8,7 +8,7 @@ var Blog = require("../models/blog"),
 // =====================
 
 // NEW - show a form to create a new comment
-router.get("/new", function(req ,res) {
+router.get("/new", isLoggedIn, function(req ,res) {
     // find the blog post by id
     Blog.findById(req.params.id, function(err, blogPost) {
         if (err) {
@@ -20,18 +20,29 @@ router.get("/new", function(req ,res) {
 });
 
 // CREATE - add the comment to the post and save to the database
-router.post("/", function(req, res) {
+router.post("/", isLoggedIn, function(req, res) {
     // look up the blog post using ID
     Blog.findById(req.params.id, function(err, blogPost) {
         if(err) {
             console.log(err);
+            res.redirect("/blogs");
         } else {
             // create the new comment
             Comment.create(req.body.comment, function(err, comment) {
-                // associate the comment with the blog post
-                blogPost.comments.push(comment);
-                blogPost.save();
-                res.redirect("/blogs/" + req.params.id);
+                if(err) {
+                    console.log(err);
+                } else {
+                    // add username and id to comment, we can also be sure a user exists
+                    // because of the isLoggedIn middleware
+                    comment.author.id = req.user._id;
+                    comment.author.username = req.user.username;
+                    // save the comment
+                    comment.save();
+                    // associate the comment with the blog post
+                    blogPost.comments.push(comment);
+                    blogPost.save();
+                    res.redirect("/blogs/" + req.params.id);
+                }
             });
         }
     });
