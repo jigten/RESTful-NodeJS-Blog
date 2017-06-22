@@ -48,12 +48,66 @@ router.post("/", isLoggedIn, function(req, res) {
     });
 });
 
+// EDIT
+router.get("/:comment_id/edit", checkCommentOwnership, function(req, res) {
+    Comment.findById(req.params.comment_id, function(err, foundComment) {
+        if(err) {
+            res.redirect("back");
+        } else {
+            res.render("comments/edit", {blog_id: req.params.id, comment: foundComment});
+        }
+    });
+});
+
+// UPDATE
+router.put("/:comment_id", checkCommentOwnership, function(req, res) {
+    Comment.findByIdAndUpdate(req.params.comment_id, req.body.comment, function (err, updatedComment) {
+        if(err) {
+            res.redirect("back");
+        } else {
+            res.redirect("/blogs/" + req.params.id);
+        }
+    });
+});
+
+// DESTROY
+router.delete("/:comment_id", checkCommentOwnership, function(req, res) {
+   // findByIdAndRemove
+    Comment.findByIdAndRemove(req.params.comment_id, function(err) {
+        if(err) {
+            res.redirect("back");
+        } else {
+            res.redirect("/blogs/" + req.params.id);
+        }
+    })
+});
+
 // middleware
 function isLoggedIn(req, res, next) {
     if(req.isAuthenticated()) {
         return next();
     }
     res.redirect("/login");
+}
+
+function checkCommentOwnership(req, res, next) {
+    // is user logged in
+    if(req.isAuthenticated()) {
+        Comment.findById(req.params.comment_id, function(err, foundComment) {
+            if(err) {
+                res.redirect("back");
+            } else {
+                // does the user own the comment?
+                if(foundComment.author.id.equals(req.user._id)) {
+                    next();
+                } else {
+                    res.redirect("back");
+                }
+            }
+        });
+    } else {
+        res.redirect("back");
+    }
 }
 
 module.exports = router;

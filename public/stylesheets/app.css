@@ -38,3 +38,11 @@ i.icon {
 .inverted.message {
     padding-left: inherit;
 }
+
+#delete-comment {
+    display: inline;
+}
+
+i.icon {
+    font-size: inherit;
+}
