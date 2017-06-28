@@ -27,6 +27,10 @@ app.use(methodOverride("_method"));
 
 // seedDB();
 
+// MomentJS
+// this makes MomentJS available throughout all out templates with the variable 'moment'
+app.locals.moment = require("moment");
+
 // Passport Configuration
 app.use(require("express-session")({
     secret: "I bet my life for you",
