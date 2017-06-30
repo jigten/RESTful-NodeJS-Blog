@@ -14,7 +14,7 @@
             <div id="description" class="description">
                 <p><%- blog.body %></p>
             </div>
-            <% if(currentUser && blog.author.id.equals(currentUser._id)) { %>
+            <% if(currentUser && blog.author.id.equals(currentUser._id) || currentUser && currentUser.isAdmin) { %>
             <a class="ui blue basic button" href="/blogs/<%= blog._id %>/edit">Edit</a>
             <form id="delete" action="/blogs/<%= blog._id %>?_method=DELETE" method="POST">
                 <button class="ui red basic button">Delete</button>
@@ -45,7 +45,7 @@
                 <div class="text">
                     <%= comment.text %>
                 </div>
-                <% if(currentUser && comment.author.id.equals(currentUser._id)) { %>
+                <% if(currentUser && comment.author.id.equals(currentUser._id) || currentUser && currentUser.isAdmin) { %>
                 <div class="ui small basic icon buttons">
                     <a href="/blogs/<%= blog._id %>/comments/<%= comment._id %>/edit"><button class="ui button"><i class="edit icon"></i></button></a>
                     <form id="delete-comment" action="/blogs/<%= blog._id %>/comments/<%= comment._id %>?_method=DELETE" method="POST">
