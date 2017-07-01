@@ -1,0 +1,33 @@
+<% include ./../partials/header %>
+
+<div id="user-profile-div" class="ui main text container segment">
+    <div class="ui two column grid container">
+        <div class="column">
+            <div class="ui horizontal list">
+                <h2 class="ui header">
+                    <img class="ui circular image" src="<%= user.avatar %>" alt="User profile image">
+                    <div class="content">
+                        <div class="ui sub header"><%= user.firstName + " " + user.lastName %></div>
+                        <div class="ui sub header">@<%= user.username %></div>
+                    </div>
+                </h2>
+            </div>
+            <div class="ui clearing divider"></div>
+            <div class="content">
+                <p> @ : <%= user.email %></p>
+            </div>
+        </div>
+        <div class="column">
+            <h2 class="ui header">
+                <div class="ui sub header"><%= user.username + "'s posts:" %></div>
+            </h2>
+            <ul>
+                <% blogs.forEach(function(blog) { %>
+                    <li><a href="/blogs/<%= blog.id %>"><%= blog.title %></a></li>
+                <% }) %>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<% include ./../partials/footer %>

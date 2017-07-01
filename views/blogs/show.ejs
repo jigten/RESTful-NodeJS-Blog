@@ -6,7 +6,7 @@
         <div class="item">
             <img class="ui centered rounded image" src="<%= blog.image %>">
             <div class="content">
-                <span id="author">Author: <%= blog.author.username %> %></span>
+                <span id="author">Author: <a href="/users/<%= blog.author.id %>"><%= blog.author.username %> %></a></span>
             </div>
             <div class="content">
                 <span><%= moment(blog.created).fromNow()%> on <%= blog.created.toDateString() %></span>

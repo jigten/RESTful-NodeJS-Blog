@@ -2,6 +2,7 @@ var express = require("express");
 var router = express.Router();
 var passport = require("passport");
 var User = require("../models/user");
+var Blog = require("../models/blog");
 
 // Landing Page redirecting to Blog Index route for now
 router.get("/", function (req, res) {
@@ -19,7 +20,13 @@ router.get("/register", function(req, res) {
 
 // handle sign up logic
 router.post("/register", function(req, res) {
-    var newUser = User({username: req.body.username});
+    var newUser = new User({
+        username: req.body.username,
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        email: req.body.email,
+        avatar: req.body.avatar
+    });
     if(req.body.adminCode === '2ez4rtz') {
         newUser.isAdmin = true;
     }
@@ -52,13 +59,21 @@ router.get("/logout", function(req, res) {
     res.redirect("/blogs");
 });
 
-
-// middleware
-function isLoggedIn(req, res, next) {
-    if(req.isAuthenticated()) {
-        return next();
-    }
-    res.redirect("/login");
-}
+// USER PROFILES
+router.get("/users/:id", function(req, res) {
+    User.findById(req.params.id, function(err, foundUser) {
+       if(err) {
+           res.redirect("/");
+       } else {
+           Blog.find().where('author.id').equals(foundUser._id).exec(function(err, blogs) {
+               if(err) {
+                   res.redirect("/");
+               } else{
+                   res.render("users/show", {user: foundUser, blogs: blogs});
+               }
+           });
+       }
+    });
+});
 
 module.exports = router;
