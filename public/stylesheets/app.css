@@ -46,3 +46,12 @@ i.icon {
 i.icon {
     font-size: inherit;
 }
+
+.ui.comments .comment img.avatar,
+.ui.comments .comment .avatar img {
+    display: block;
+    margin: 0em auto;
+    width: 100%;
+    height: auto; // 100% doesn't work but auto does
+border-radius: @avatarBorderRadius;
+}

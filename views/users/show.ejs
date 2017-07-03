@@ -21,11 +21,17 @@
             <h2 class="ui header">
                 <div class="ui sub header"><%= user.username + "'s posts:" %></div>
             </h2>
-            <ul>
+            <div class="ui large feed">
                 <% blogs.forEach(function(blog) { %>
-                    <li><a href="/blogs/<%= blog.id %>"><%= blog.title %></a></li>
+                <div class="event">
+                    <div class="content">
+                        <div class="extra images">
+                            <a href="/blogs/<%= blog.id %>"><img src="<%= blog.image %>"></a>
+                        </div>
+                    </div>
+                </div>
                 <% }) %>
-            </ul>
+            </div>
         </div>
     </div>
 </div>

@@ -35,6 +35,9 @@
         <div class="ui comments">
         <% blog.comments.forEach(function(comment) { %>
         <div class="comment">
+            <div class="avatar">
+                <img src="<%= comment.author.avatar %>">
+            </div>
             <div class="content">
                 <div class="author">
                     <%= comment.author.username %>

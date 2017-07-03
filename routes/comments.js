@@ -37,6 +37,7 @@ router.post("/", middleware.isLoggedIn, function(req, res) {
                     // because of the isLoggedIn middleware
                     comment.author.id = req.user._id;
                     comment.author.username = req.user.username;
+                    comment.author.avatar = req.user.avatar;
                     // save the comment
                     comment.save();
                     // associate the comment with the blog post

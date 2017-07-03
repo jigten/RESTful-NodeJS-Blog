@@ -15,7 +15,7 @@
                     <a class="item" href="/register">Sign Up</a>
                     <a class="item" href="/login">Log In</a>
                     <% } else { %>
-                    <a class="item" href="#"> <%= currentUser.username %> </a>
+                    <a href="/users/<%= currentUser._id %>" class="item"><img style="margin-right: 8px" class="ui mini circular image" src="<%= currentUser.avatar %>"> <%= currentUser.username %></a>
                     <a class="item" href="/logout">Log Out</a>
                     <% } %>
                 </div>
